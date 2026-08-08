@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Mic, Volume2, RotateCcw, Radio } from "lucide-react";
+import { Mic, Volume2, RotateCcw } from "lucide-react";
 
 type Phase = "idle" | "recording" | "processing" | "results";
 
@@ -25,8 +25,8 @@ function formatTime(totalSeconds: number) {
 }
 
 function RadialGauge({ value }: { value: number }) {
-  const size = 168;
-  const stroke = 10;
+  const size = 160;
+  const stroke = 12;
   const r = (size - stroke) / 2;
   const circumference = 2 * Math.PI * r;
   const sweep = 0.75;
@@ -42,7 +42,7 @@ function RadialGauge({ value }: { value: number }) {
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="#EAF6EC"
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={`${arcLength} ${circumference}`}
@@ -62,19 +62,14 @@ function RadialGauge({ value }: { value: number }) {
         />
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3FD6C0" />
-            <stop offset="100%" stopColor="#5EEBD6" />
+            <stop offset="0%" stopColor="#2d9e3c" />
+            <stop offset="100%" stopColor="#5cce6a" />
           </linearGradient>
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span
-          className="text-4xl font-bold tabular-nums"
-          style={{ fontFamily: "'IBM Plex Mono', monospace", color: "#3FD6C0" }}
-        >
-          {value}
-        </span>
-        <span className="text-[10px] tracking-[0.2em] uppercase text-[#FFFFFF] mt-0.5">Overall</span>
+        <span className="text-4xl font-bold tabular-nums text-[#2d9e3c]">{value}</span>
+        <span className="text-[10px] tracking-[0.2em] uppercase text-gray-400 mt-0.5">Overall</span>
       </div>
     </div>
   );
@@ -118,67 +113,18 @@ const LectureConsole = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: "#0E1013", fontFamily: "Inter, system-ui, sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
-        @keyframes pulse-0 { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
-        @keyframes pulse-1 { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        @keyframes pulse-2 { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
-        @keyframes pulse-3 { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-up { animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both; }
-        @media (prefers-reduced-motion: reduce) {
-          * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
-        }
-      `}</style>
-
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 50% 0%, rgba(63,214,192,0.08) 0%, transparent 70%), radial-gradient(40% 35% at 85% 15%, rgba(255,91,57,0.05) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <div className="relative max-w-2xl mx-auto px-5 py-10 sm:py-14 text-[#E8EAED]">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <p
-              className="text-[11px] tracking-[0.25em] uppercase text-[#FFFFFF] mb-1.5 flex items-center gap-1.5"
-              style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-            >
-              <Radio size={11} />
-              Channel 01 · Mic In
-            </p>
-            <h1
-              className="text-2xl sm:text-3xl font-bold tracking-tight"
-              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-            >
-              Lecture Console
-            </h1>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3FD6C0]" style={{ boxShadow: "0 0 8px #3FD6C0" }} />
-            <span className="text-[10px] tracking-[0.15em] uppercase text-[#FFFFFF]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
-              System Online
-            </span>
-          </div>
+    <div className="min-h-screen bg-[#f4faf5]">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Lecture Console</h1>
+          <p className="text-sm text-gray-400 mt-1">Record, generate questions, and review teaching effectiveness</p>
         </div>
 
+        {/* Input strip */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           <div>
-            <label
-              className="block text-[10px] tracking-[0.2em] uppercase text-[#FFFFFF] mb-2"
-              style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-            >
+            <label className="block text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">
               Lecture Topic
             </label>
             <input
@@ -187,15 +133,11 @@ const LectureConsole = () => {
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="e.g. Introduction to Ohm's Law"
-              className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#3FD6C0]/50 focus:bg-white/[0.05] transition-all disabled:opacity-40 placeholder:text-[#D0D0D0]"
-              style={{ boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#5cce6a]/30 focus:border-[#5cce6a] transition disabled:opacity-50 disabled:bg-gray-50"
             />
           </div>
           <div>
-            <label
-              className="block text-[10px] tracking-[0.2em] uppercase text-[#FFFFFF] mb-2"
-              style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-            >
+            <label className="block text-xs font-mono uppercase tracking-widest text-gray-400 mb-2">
               Class Taught
             </label>
             <input
@@ -204,52 +146,37 @@ const LectureConsole = () => {
               value={className}
               onChange={(e) => setClassName(e.target.value)}
               placeholder="e.g. SS2 Physics"
-              className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#3FD6C0]/50 focus:bg-white/[0.05] transition-all disabled:opacity-40 placeholder:text-[#D0D0D0]"
-              style={{ boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#5cce6a]/30 focus:border-[#5cce6a] transition disabled:opacity-50 disabled:bg-gray-50"
             />
           </div>
         </div>
 
-        <div
-          className="rounded-3xl p-8 sm:p-10 flex flex-col items-center mb-5 relative overflow-hidden"
-          style={{
-            background: "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.015) 100%)",
-            border: "1px solid rgba(255,255,255,0.07)",
-            boxShadow: "0 20px 60px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
-          }}
-        >
+        {/* Recording card */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-8 sm:p-10 flex flex-col items-center mb-6">
           <button
             onClick={handleToggleRecording}
             disabled={!canStart && phase === "idle"}
-            className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-25 disabled:cursor-not-allowed active:scale-95"
+            className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center transition disabled:opacity-30 disabled:cursor-not-allowed"
             style={{
               background:
                 phase === "recording"
-                  ? "radial-gradient(circle at 35% 30%, #FF7A5C, #FF5B39)"
-                  : "linear-gradient(180deg, #2A3138, #1D2228)",
+                  ? "linear-gradient(135deg, #ef4444, #f87171)"
+                  : "linear-gradient(135deg, #2d9e3c, #5cce6a)",
               boxShadow:
                 phase === "recording"
-                  ? "0 0 0 10px rgba(255,91,57,0.10), 0 0 50px rgba(255,91,57,0.4), inset 0 2px 4px rgba(255,255,255,0.15)"
-                  : "0 8px 24px -8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.06)",
+                  ? "0 0 0 8px rgba(239,68,68,0.12), 0 8px 24px -6px rgba(239,68,68,0.4)"
+                  : "0 8px 24px -6px rgba(45,158,60,0.35)",
             }}
           >
             {phase === "recording" && (
-              <span className="absolute inset-0 rounded-full animate-ping bg-[#FF5B39]/25" />
+              <span className="absolute inset-0 rounded-full animate-ping bg-red-400/30" />
             )}
-            <Mic
-              size={36}
-              className={phase === "recording" ? "text-white" : "text-[#FFFFFF]"}
-              strokeWidth={1.75}
-            />
+            <Mic size={36} className="text-white" strokeWidth={1.75} />
           </button>
 
-          <p
-            className="mt-6 text-3xl tabular-nums tracking-wide"
-            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-          >
-            {formatTime(elapsed)}
-          </p>
+          <p className="mt-5 text-3xl font-mono tabular-nums text-gray-800">{formatTime(elapsed)}</p>
 
+          {/* Waveform */}
           <div className="flex items-end gap-[3px] h-6 mt-3">
             {Array.from({ length: 28 }).map((_, i) => (
               <span
@@ -257,23 +184,20 @@ const LectureConsole = () => {
                 className="w-[3px] rounded-full"
                 style={{
                   height: phase === "recording" ? `${18 + Math.abs(Math.sin(i * 1.3)) * 82}%` : "12%",
-                  background: phase === "recording" ? "linear-gradient(180deg, #FF9A82, #FF5B39)" : "#2A2F35",
+                  background: phase === "recording" ? "#ef4444" : "#e5e7eb",
                   transition: "height 0.2s ease, background 0.3s ease",
-                  animation: phase === "recording" ? `pulse-${i % 4} 0.9s ease-in-out infinite` : "none",
                 }}
               />
             ))}
           </div>
 
           <p
-            className="mt-6 text-xs uppercase tracking-[0.25em] font-medium"
-            style={{
-              fontFamily: "'IBM Plex Mono', monospace",
-              color: phase === "recording" ? "#FF5B39" : "#F0F0F0",
-            }}
+            className={`mt-6 text-xs uppercase tracking-widest font-mono font-semibold ${
+              phase === "recording" ? "text-red-500" : "text-gray-400"
+            }`}
           >
             {phase === "idle" && (canStart ? "Ready" : "Enter topic & class to begin")}
-            {phase === "recording" && "● On Air"}
+            {phase === "recording" && "● Recording"}
             {phase === "processing" && "Generating questions…"}
             {phase === "results" && "Session complete"}
           </p>
@@ -282,12 +206,12 @@ const LectureConsole = () => {
             <button
               onClick={handleToggleRecording}
               disabled={!canStart}
-              className="mt-6 px-7 py-3 rounded-full text-sm font-semibold transition-all disabled:opacity-25 disabled:cursor-not-allowed hover:scale-[1.03] active:scale-95"
+              className="mt-6 flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition disabled:opacity-40 disabled:cursor-not-allowed shadow-md"
               style={{
-                background: phase === "recording" ? "rgba(255,255,255,0.06)" : "linear-gradient(180deg, #4FE3CE, #3FD6C0)",
-                color: phase === "recording" ? "#E8EAED" : "#0E1013",
-                border: phase === "recording" ? "1px solid rgba(255,255,255,0.1)" : "none",
-                boxShadow: phase === "recording" ? "none" : "0 8px 20px -6px rgba(63,214,192,0.5)",
+                background:
+                  phase === "recording"
+                    ? "linear-gradient(135deg, #ef4444, #f87171)"
+                    : "linear-gradient(135deg, #2d9e3c, #5cce6a)",
               }}
             >
               {phase === "recording" ? "Stop Recording" : "Start Recording"}
@@ -295,116 +219,85 @@ const LectureConsole = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] text-[#F0F0F0] mb-10 px-1" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+        <div className="flex items-center gap-2 text-xs text-gray-400 font-mono mb-8 px-1">
           <Volume2 size={13} />
-          <span>Channel 02 · Speaker Out — questions relay after processing</span>
+          <span>Questions relay to the speaker after processing</span>
         </div>
 
+        {/* Processing */}
         {phase === "processing" && (
-          <div
-            className="rounded-3xl p-10 text-center fade-up"
-            style={{
-              background: "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.015) 100%)",
-              border: "1px solid rgba(255,255,255,0.07)",
-            }}
-          >
-            <div className="w-9 h-9 mx-auto mb-4 border-[3px] border-[#3FD6C0]/20 border-t-[#3FD6C0] rounded-full animate-spin" />
-            <p className="text-sm text-[#FFFFFF]">Scoring comprehension and lecture scope…</p>
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-10 text-center">
+            <div className="w-9 h-9 mx-auto mb-4 border-[3px] border-[#5cce6a]/20 border-t-[#2d9e3c] rounded-full animate-spin" />
+            <p className="text-sm text-gray-400">Scoring comprehension and lecture scope…</p>
           </div>
         )}
 
+        {/* Results */}
         {phase === "results" && (
           <div className="space-y-4">
-            <div
-              className="rounded-3xl p-6 sm:p-8 fade-up"
-              style={{
-                background: "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.015) 100%)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                boxShadow: "0 20px 60px -25px rgba(0,0,0,0.5)",
-              }}
-            >
-              <p className="text-[10px] tracking-[0.2em] uppercase text-[#FFFFFF] mb-5" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+            {/* Score */}
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
+              <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-5">
                 Teaching Effectiveness
               </p>
 
-              <div className="flex items-center gap-8 mb-2">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
                 <RadialGauge value={MOCK_RESULT.overall} />
-                <div className="flex-1 space-y-4">
+                <div className="flex-1 w-full space-y-4">
                   <div>
                     <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-[#FFFFFF]">Comprehension</span>
-                      <span style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-[#E8EAED]">
-                        {MOCK_RESULT.comprehension}%
-                      </span>
+                      <span className="text-gray-500">Student Comprehension</span>
+                      <span className="font-mono text-gray-700">{MOCK_RESULT.comprehension}%</span>
                     </div>
-                    <div className="h-2 rounded-full bg-white/[0.05] overflow-hidden">
+                    <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
                       <div
                         className="h-full rounded-full"
-                        style={{ width: `${MOCK_RESULT.comprehension}%`, background: "linear-gradient(90deg, #3FD6C0, #5EEBD6)" }}
+                        style={{ width: `${MOCK_RESULT.comprehension}%`, background: "linear-gradient(90deg, #2d9e3c, #5cce6a)" }}
                       />
                     </div>
-                    <p className="text-[10px] text-[#F0F0F0] mt-1" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
-                      weight 70%
-                    </p>
+                    <p className="text-[10px] text-gray-400 font-mono mt-1">weight 70%</p>
                   </div>
                   <div>
                     <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-[#FFFFFF]">Teaching Scope</span>
-                      <span style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-[#E8EAED]">
-                        {MOCK_RESULT.scope}%
-                      </span>
+                      <span className="text-gray-500">Teaching Scope</span>
+                      <span className="font-mono text-gray-700">{MOCK_RESULT.scope}%</span>
                     </div>
-                    <div className="h-2 rounded-full bg-white/[0.05] overflow-hidden">
+                    <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
                       <div
                         className="h-full rounded-full"
-                        style={{ width: `${MOCK_RESULT.scope}%`, background: "linear-gradient(90deg, #FF5B39, #FF9A82)" }}
+                        style={{ width: `${MOCK_RESULT.scope}%`, background: "linear-gradient(90deg, #f59e0b, #fbbf24)" }}
                       />
                     </div>
-                    <p className="text-[10px] text-[#F0F0F0] mt-1" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
-                      weight 30%
-                    </p>
+                    <p className="text-[10px] text-gray-400 font-mono mt-1">weight 30%</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div
-              className="rounded-3xl p-6 sm:p-8 fade-up"
-              style={{
-                background: "linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.015) 100%)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                animationDelay: "0.08s",
-              }}
-            >
-              <p className="text-[10px] tracking-[0.2em] uppercase text-[#FFFFFF] mb-4" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+            {/* Tips */}
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
+              <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">
                 Topics To Revisit
               </p>
               <div className="space-y-4 mb-7">
                 {MOCK_RESULT.revisit.map((r, i) => (
-                  <div key={i} className="pl-4 relative">
-                    <span
-                      className="absolute left-0 top-1 bottom-1 w-[2px] rounded-full"
-                      style={{ background: "linear-gradient(180deg, #3FD6C0, transparent)" }}
-                    />
-                    <p className="text-sm font-medium text-[#E8EAED]">{r.topic}</p>
-                    <p className="text-xs text-[#FFFFFF] mt-1 leading-relaxed">{r.note}</p>
+                  <div key={i} className="border-l-2 border-[#5cce6a] pl-4">
+                    <p className="text-sm font-semibold text-gray-900">{r.topic}</p>
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">{r.note}</p>
                   </div>
                 ))}
               </div>
 
-              <p className="text-[10px] tracking-[0.2em] uppercase text-[#FFFFFF] mb-4" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+              <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">
                 Top 3 Actions
               </p>
               <ol className="space-y-3">
                 {MOCK_RESULT.topActions.map((action, i) => (
                   <li key={i} className="flex gap-3.5 text-sm">
-                    <span
-                      className="shrink-0 w-6 h-6 rounded-full text-[11px] flex items-center justify-center mt-0.5 font-semibold"
-                      style={{ fontFamily: "'IBM Plex Mono', monospace", background: "rgba(63,214,192,0.12)", color: "#3FD6C0" }}
-                    >
+                    <span className="shrink-0 w-6 h-6 rounded-full bg-[#eafbee] text-[#2d9e3c] text-xs font-mono font-bold flex items-center justify-center mt-0.5">
                       {i + 1}
                     </span>
-                    <span className="text-[#E8EAED] leading-relaxed pt-0.5">{action}</span>
+                    <span className="text-gray-700 leading-relaxed pt-0.5">{action}</span>
                   </li>
                 ))}
               </ol>
@@ -412,8 +305,7 @@ const LectureConsole = () => {
 
             <button
               onClick={handleReset}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm text-[#FFFFFF] border border-white/[0.06] hover:border-white/[0.15] hover:text-[#E8EAED] hover:bg-white/[0.02] transition-all fade-up"
-              style={{ animationDelay: "0.16s" }}
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium text-gray-500 border border-gray-200 hover:border-[#5cce6a]/40 hover:text-[#2d9e3c] hover:bg-[#f0fdf4] transition"
             >
               <RotateCcw size={14} />
               Start New Session
