@@ -225,56 +225,62 @@ const LectureConsole = () => {
         </div>
 
         {/* Processing */}
-        {phase === "processing" && (
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-10 text-center">
-            <div className="w-9 h-9 mx-auto mb-4 border-[3px] border-[#5cce6a]/20 border-t-[#2d9e3c] rounded-full animate-spin" />
-            <p className="text-sm text-gray-400">Scoring comprehension and lecture scope…</p>
+        {/* Score — always on the board, starts at 0%, fills in once results are ready */}
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8 mb-4">
+          <div className="flex items-center justify-between mb-5">
+            <p className="text-xs font-mono uppercase tracking-widest text-gray-400">
+              Teaching Effectiveness
+            </p>
+            {phase === "processing" && (
+              <span className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-gray-400">
+                <span className="w-3.5 h-3.5 border-2 border-[#5cce6a]/30 border-t-[#2d9e3c] rounded-full animate-spin" />
+                Scoring…
+              </span>
+            )}
           </div>
-        )}
 
-        {/* Results */}
-        {phase === "results" && (
-          <div className="space-y-4">
-            {/* Score */}
-            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
-              <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-5">
-                Teaching Effectiveness
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
-                <RadialGauge value={MOCK_RESULT.overall} />
-                <div className="flex-1 w-full space-y-4">
-                  <div>
-                    <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-gray-500">Student Comprehension</span>
-                      <span className="font-mono text-gray-700">{MOCK_RESULT.comprehension}%</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                      <div
-                        className="h-full rounded-full"
-                        style={{ width: `${MOCK_RESULT.comprehension}%`, background: "linear-gradient(90deg, #2d9e3c, #5cce6a)" }}
-                      />
-                    </div>
-                    <p className="text-[10px] text-gray-400 font-mono mt-1">weight 70%</p>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-gray-500">Teaching Scope</span>
-                      <span className="font-mono text-gray-700">{MOCK_RESULT.scope}%</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                      <div
-                        className="h-full rounded-full"
-                        style={{ width: `${MOCK_RESULT.scope}%`, background: "linear-gradient(90deg, #f59e0b, #fbbf24)" }}
-                      />
-                    </div>
-                    <p className="text-[10px] text-gray-400 font-mono mt-1">weight 30%</p>
-                  </div>
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+            <RadialGauge value={phase === "results" ? MOCK_RESULT.overall : 0} />
+            <div className="flex-1 w-full space-y-4">
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="text-gray-500">Student Comprehension</span>
+                  <span className="font-mono text-gray-700">{phase === "results" ? MOCK_RESULT.comprehension : 0}%</span>
                 </div>
+                <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{
+                      width: `${phase === "results" ? MOCK_RESULT.comprehension : 0}%`,
+                      background: "linear-gradient(90deg, #2d9e3c, #5cce6a)",
+                    }}
+                  />
+                </div>
+                <p className="text-[10px] text-gray-400 font-mono mt-1">weight 70%</p>
+              </div>
+              <div>
+                <div className="flex justify-between text-xs mb-1.5">
+                  <span className="text-gray-500">Teaching Scope</span>
+                  <span className="font-mono text-gray-700">{phase === "results" ? MOCK_RESULT.scope : 0}%</span>
+                </div>
+                <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{
+                      width: `${phase === "results" ? MOCK_RESULT.scope : 0}%`,
+                      background: "linear-gradient(90deg, #f59e0b, #fbbf24)",
+                    }}
+                  />
+                </div>
+                <p className="text-[10px] text-gray-400 font-mono mt-1">weight 30%</p>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Tips */}
+        {/* Tips — only appear once the score has actually been generated */}
+        {phase === "results" && (
+          <div className="space-y-4">
             <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sm:p-8">
               <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">
                 Topics To Revisit
